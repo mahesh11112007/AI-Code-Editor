@@ -7,7 +7,6 @@ from dotenv import load_dotenv
 from fastapi.middleware.cors import CORSMiddleware
 
 load_dotenv()
-
 app = FastAPI()
 
 # Add CORS middleware
@@ -29,6 +28,15 @@ class CodeRequest(BaseModel):
 class CodeResponse(BaseModel):
     code: str
     explanation: str
+
+# Basic health and hello endpoints for Vercel API routing
+@app.get("/api/health")
+def health():
+    return {"status": "ok"}
+
+@app.get("/api/hello")
+def hello():
+    return {"message": "Hello from AI Code Editor API"}
 
 @app.get("/")
 def root():
@@ -99,6 +107,7 @@ async def optimize_code(code: dict):
         raise HTTPException(status_code=500, detail=str(e))
 
 # For Vercel deployment
+# Vercel's Python runtime expects the handler to be exported as `app` from this module.
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
