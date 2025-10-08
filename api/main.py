@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
 from typing import List, Dict
 import openai
@@ -7,6 +8,7 @@ from dotenv import load_dotenv
 from fastapi.middleware.cors import CORSMiddleware
 
 load_dotenv()
+
 app = FastAPI()
 
 # Add CORS middleware
@@ -42,9 +44,171 @@ def health():
 def hello():
     return {"message": "Hello from AI Code Editor API"}
 
-@app.get("/")
+@app.get("/", response_class=HTMLResponse)
 def root():
-    return {"message": "AI Code Editor API is running"}
+    html_content = """
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>AI Code Editor API</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+            
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                min-height: 100vh;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding: 20px;
+            }
+            
+            .container {
+                background: rgba(255, 255, 255, 0.95);
+                border-radius: 20px;
+                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+                padding: 50px;
+                max-width: 800px;
+                width: 100%;
+                text-align: center;
+            }
+            
+            .logo {
+                font-size: 4rem;
+                margin-bottom: 20px;
+            }
+            
+            h1 {
+                color: #333;
+                font-size: 2.5rem;
+                margin-bottom: 15px;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+            }
+            
+            .tagline {
+                color: #666;
+                font-size: 1.2rem;
+                margin-bottom: 30px;
+            }
+            
+            .description {
+                color: #555;
+                font-size: 1rem;
+                line-height: 1.6;
+                margin-bottom: 40px;
+                text-align: left;
+            }
+            
+            .api-links {
+                display: flex;
+                gap: 20px;
+                justify-content: center;
+                flex-wrap: wrap;
+                margin-top: 30px;
+            }
+            
+            .api-link {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                text-decoration: none;
+                padding: 15px 30px;
+                border-radius: 50px;
+                font-weight: 600;
+                transition: all 0.3s ease;
+                box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            }
+            
+            .api-link:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+            }
+            
+            .features {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 20px;
+                margin-top: 40px;
+                text-align: left;
+            }
+            
+            .feature {
+                background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+                padding: 20px;
+                border-radius: 10px;
+                transition: transform 0.3s ease;
+            }
+            
+            .feature:hover {
+                transform: scale(1.05);
+            }
+            
+            .feature-icon {
+                font-size: 2rem;
+                margin-bottom: 10px;
+            }
+            
+            .feature-title {
+                font-weight: 600;
+                color: #333;
+                margin-bottom: 5px;
+            }
+            
+            .feature-desc {
+                font-size: 0.9rem;
+                color: #666;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="logo">🤖💻</div>
+            <h1>AI Code Editor API</h1>
+            <p class="tagline">Powered by OpenAI • Built with FastAPI</p>
+            
+            <div class="description">
+                <p>Welcome to the AI Code Editor API - your intelligent coding companion! 
+                This powerful API leverages OpenAI's GPT models to help you generate, explain, 
+                and optimize code across multiple programming languages.</p>
+            </div>
+            
+            <div class="features">
+                <div class="feature">
+                    <div class="feature-icon">✨</div>
+                    <div class="feature-title">Code Generation</div>
+                    <div class="feature-desc">Generate code from natural language descriptions</div>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">📖</div>
+                    <div class="feature-title">Code Explanation</div>
+                    <div class="feature-desc">Understand complex code with AI explanations</div>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">⚡</div>
+                    <div class="feature-title">Code Optimization</div>
+                    <div class="feature-desc">Improve performance and best practices</div>
+                </div>
+            </div>
+            
+            <div class="api-links">
+                <a href="/api/health" class="api-link">Health Check</a>
+                <a href="/api/hello" class="api-link">API Hello</a>
+                <a href="/docs" class="api-link">API Documentation</a>
+            </div>
+        </div>
+    </body>
+    </html>
+    """
+    return html_content
 
 @app.post("/generate-code", response_model=CodeResponse)
 async def generate_code(request: CodeRequest):
