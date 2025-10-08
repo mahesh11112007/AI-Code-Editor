@@ -7,6 +7,7 @@ An AI-powered code editor application with a FastAPI backend and Flutter mobile 
 - [Project Structure](#project-structure)
 - [Features](#features)
 - [AI Integration](#ai-integration)
+- [⚠️ Security Warning](#security-warning)
 - [Setup Instructions](#setup-instructions)
   - [Backend Setup (FastAPI)](#backend-setup-fastapi)
   - [Mobile Setup (Flutter)](#mobile-setup-flutter)
@@ -31,6 +32,7 @@ AI-Code-Editor/
 ## ✨ Features
 
 ### Backend (FastAPI)
+
 - **RESTful API Architecture**: Clean and scalable API design
 - **CORS Support**: Cross-origin resource sharing enabled for mobile app integration
 - **Health Check Endpoint**: Monitor backend service status
@@ -38,6 +40,7 @@ AI-Code-Editor/
 - **Type Safety**: Pydantic models for request/response validation
 
 ### Mobile (Flutter)
+
 - **Cross-Platform Support**: Runs on iOS and Android from a single codebase
 - **Material Design UI**: Modern and intuitive user interface
 - **HTTP Integration**: Seamless communication with backend API
@@ -49,71 +52,92 @@ AI-Code-Editor/
 This project is designed with AI integration capabilities in mind:
 
 - **Modular Architecture**: Easy to integrate AI/ML services
-- **API-First Design**: Backend ready for AI model endpoints
-- **Extensible Structure**: Add AI features like:
-  - Code completion and suggestions
-  - Syntax error detection
-  - Code quality analysis
-  - Smart refactoring recommendations
-  - Natural language to code conversion
+- **API-First Design**: Simple to connect with various AI providers
+- **Scalable Backend**: FastAPI handles async AI operations efficiently
 
-**Note**: AI models can be integrated through the [FastAPI backend](backend/main.py) by adding new endpoints and connecting to AI services (OpenAI, Hugging Face, etc.)
+## ⚠️ Security Warning
+
+**IMPORTANT: Environment Variables and API Keys**
+
+**DO NOT** commit `.env` files or any files containing API keys, secrets, or credentials to this repository. The `.env` file has been removed from the repository and git history to protect exposed API keys.
+
+### For Vercel Deployment:
+
+When deploying to Vercel, **never** include environment variables in your code or repository. Instead, configure them securely through Vercel's dashboard:
+
+1. Go to your Vercel project dashboard
+2. Navigate to **Settings** → **Environment Variables**
+3. Add your environment variables:
+   - `OPENROUTER_API_KEY` - Your OpenRouter API key
+   - Any other sensitive configuration values
+4. Select the appropriate environments (Production, Preview, Development)
+5. Click **Save**
+
+### Best Practices:
+
+- **Never** commit files containing secrets (`.env`, config files with keys, etc.)
+- Always add `.env` to your `.gitignore` file
+- Use Vercel's Environment Variables for all API keys and secrets
+- Rotate any API keys that were previously exposed
+- Use different API keys for development and production environments
+
+### For Local Development:
+
+Create a `.env` file in the `backend/` directory (this file is already in `.gitignore`):
+
+```bash
+OPENROUTER_API_KEY=your_api_key_here
+```
+
+**Remember**: This file should NEVER be committed to the repository.
 
 ## 🚀 Setup Instructions
 
 ### Backend Setup (FastAPI)
 
-1. **Navigate to the backend directory**:
+1. **Navigate to backend directory**:
    ```bash
    cd backend
    ```
 
-2. **Create a virtual environment** (recommended):
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
-   ```
-
-3. **Install dependencies**:
+2. **Install Python dependencies**:
    ```bash
    pip install -r requirements.txt
    ```
+
+3. **Configure environment variables** (see Security Warning section above)
 
 4. **Run the FastAPI server**:
    ```bash
    uvicorn main:app --reload
    ```
-
-5. **Access the API**:
-   - API: http://localhost:8000
-   - Interactive API docs: http://localhost:8000/docs
-   - Alternative API docs: http://localhost:8000/redoc
+   The server will start at http://localhost:8000
 
 **Backend Dependencies**:
-- [FastAPI](https://fastapi.tiangolo.com/) - Modern web framework for building APIs
+- [FastAPI](https://fastapi.tiangolo.com/) - Modern web framework
 - [Uvicorn](https://www.uvicorn.org/) - ASGI server
-- [Pydantic](https://docs.pydantic.dev/) - Data validation
-- [Python-Multipart](https://andrew-d.github.io/python-multipart/) - File upload support
+- [Pydantic](https://pydantic-docs.helpmanual.io/) - Data validation
 
-See [backend/requirements.txt](backend/requirements.txt) for version details.
+See [backend/requirements.txt](backend/requirements.txt) for complete dependency list.
 
 ### Mobile Setup (Flutter)
 
-1. **Prerequisites**:
-   - Install [Flutter SDK](https://flutter.dev/docs/get-started/install)
-   - Install [Android Studio](https://developer.android.com/studio) or [Xcode](https://developer.apple.com/xcode/) (for iOS)
-
-2. **Navigate to the mobile directory**:
+1. **Navigate to mobile directory**:
    ```bash
    cd mobile
    ```
 
-3. **Install Flutter dependencies**:
+2. **Install Flutter dependencies**:
    ```bash
    flutter pub get
    ```
 
-4. **Run the app**:
+3. **Update API endpoint** in `lib/main.dart`:
+   ```dart
+   final apiUrl = 'YOUR_BACKEND_URL';  // Update with your backend URL
+   ```
+
+4. **Run the mobile app**:
    ```bash
    flutter run
    ```
