@@ -4,9 +4,9 @@
   "description": "AI Code Editor with FastAPI backend and Flutter mobile app",
   "main": "index.js",
   "scripts": {
-    "dev": "echo 'No dev server configured'",
-    "build": "echo 'Build complete'",
-    "start": "echo 'Server started'"
+    "start": "uvicorn backend.main:app --reload",
+    "dev": "uvicorn backend.main:app --reload",
+    "test": "pytest backend/"
   },
   "keywords": ["ai", "code-editor", "fastapi", "flutter"],
   "author": "mahesh11112007",
