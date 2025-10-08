@@ -1,0 +1,15 @@
+{
+  "name": "ai-code-editor",
+  "version": "1.0.0",
+  "description": "AI Code Editor with FastAPI backend and Flutter mobile app",
+  "main": "index.js",
+  "scripts": {
+    "dev": "echo 'No dev server configured'",
+    "build": "echo 'Build complete'",
+    "start": "echo 'Server started'"
+  },
+  "keywords": ["ai", "code-editor", "fastapi", "flutter"],
+  "author": "mahesh11112007",
+  "license": "ISC",
+  "dependencies": {}
+}
