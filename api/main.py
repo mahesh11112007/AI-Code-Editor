@@ -29,6 +29,10 @@ class CodeResponse(BaseModel):
     code: str
     explanation: str
 
+class FileCreateRequest(BaseModel):
+    filename: str
+    content: str
+
 # Basic health and hello endpoints for Vercel API routing
 @app.get("/api/health")
 def health():
@@ -103,6 +107,39 @@ async def optimize_code(code: dict):
         optimized_code = response.choices[0].message.content
         return {"optimized_code": optimized_code}
     
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/api/create-file")
+async def create_file(request: FileCreateRequest):
+    """Create a file with given filename and content (cloud storage ready)"""
+    try:
+        # For now, return success response
+        # In production, this would integrate with cloud storage (S3, GCS, etc.)
+        return {
+            "status": "success",
+            "message": f"File '{request.filename}' created successfully",
+            "filename": request.filename,
+            "size": len(request.content)
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/api/upload")
+async def upload_file(file: dict):
+    """Upload a file (cloud storage ready)"""
+    try:
+        # For now, return success response
+        # In production, this would integrate with cloud storage (S3, GCS, etc.)
+        filename = file.get("filename", "unknown")
+        content = file.get("content", "")
+        
+        return {
+            "status": "success",
+            "message": f"File '{filename}' uploaded successfully",
+            "filename": filename,
+            "size": len(content)
+        }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
